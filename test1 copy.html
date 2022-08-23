@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>My first three.js app</title>
+    <style>
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <script src="js/three.js"></script> -->
+    <script src="http://www.yanhuangxueyuan.com/3D/example/three.js"></script>
+    <script>
+        // const scene = new THREE.Scene();
+        // const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        // const renderer = new THREE.WebGLRenderer();
+        // renderer.setSize(window.innerWidth, window.innerHeight);
+        // document.body.appendChild(renderer.domElement);
+
+        // // 实例化一个加载器loader
+        // // const textureLoader = new THREE.TextureLoader()
+        // // const geometry = new THREE.BoxGeometry(1, 1, 1);
+        // // const material = new THREE.MeshBasicMaterial({
+        // //     color: 0x00ff00
+        // // });
+        // // const cube = new THREE.Mesh(geometry, material);
+        // // scene.add(cube);
+
+
+        // const geometry = new THREE.SphereGeometry(5, 32, 32) // 定义一个球体
+
+        // const material = new THREE.MeshLambertMaterial({
+        //     // map: texture // 将材质的map属性设置为加载的图片
+        //     color: 0x00ff00
+        // })
+        // let mesh = new THREE.Mesh(geometry, material) // 创建这个mesh对象
+        // console.log(mesh);
+
+        // scene.add(mesh)
+        // // 加载一张材质图片
+        // // textureLoader.load('./test.png', function (texture) {
+        // //     // 当材质加载完成之后，我们创建一个新的mesh对象，为这个对象创建几何和材质，为材质附上一张贴图
+        // // })
+        // // render()
+        // camera.position.z = 5;
+
+        // function animate() {
+        //     requestAnimationFrame(animate);
+
+
+        //     mesh.rotation.x += 0.01;
+        //     mesh.rotation.y += 0.01;
+
+        //     renderer.render(scene, camera);
+
+        // };
+
+        // animate();
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const textureLoader = new THREE.TextureLoader()
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        textureLoader.load('./test.png', function (texture) {
+            const geometry = new THREE.SphereGeometry(2, 32, 16);
+            const material = new THREE.MeshBasicMaterial({
+                map: texture
+            });
+            const cube = new THREE.Mesh( '',material);
+
+            scene.add(cube);
+            // 当材质加载完成之后，我们创建一个新的mesh对象，为这个对象创建几何和材质，为材质附上一张贴图
+            camera.position.z = 5;
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                cube.rotation.x += 0.01;
+                cube.rotation.y += 0.01;
+
+                renderer.render(scene, camera);
+            };
+            animate();
+        })
+    </script>
+</body>
+
+</html>

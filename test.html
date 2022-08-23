@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Tea</title>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <!-- <script src="/threejs/three.min.js"></script>
+    <script src="/threejs/OrbitControls.js"></script>
+    <script src="/threejs/OBJLoader.js"></script>
+    <script src="/threejs/MTLLoader.js"></script> -->
+    <script src="http://www.yanhuangxueyuan.com/3D/example/three.js"></script>
+    <style>
+        body,
+        canvas {
+            margin: 0;
+            padding: 0;
+            overflow: hidden
+        }
+
+        .changeColor {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1
+        }
+    </style>
+</head>
+
+<body>
+    <div class="changeColor">
+        <span id="green">绿色</span>
+        <span id="red">红色</span>
+        <span id="blue">蓝色</span>
+        <span id="yellow">黄色</span>
+    </div>
+    <script>
+        document.getElementById('green').onclick = function () {
+            createTea('green');
+        }
+        document.getElementById('red').onclick = function () {
+            createTea('red');
+        }
+        document.getElementById('blue').onclick = function () {
+            createTea('blue');
+        }
+        document.getElementById('yellow').onclick = function () {
+            createTea('yellow');
+        }
+
+        function createTea(color) {
+            var MTLLoader = new THREE.MTLLoader(); //材质文件加载器
+            MTLLoader.load('/threejs/obj/' + color + '.mtl', function (material) {
+
+                var OBJLoader = new THREE.OBJLoader(); //obj加载器
+                OBJLoader.setMaterials(material);
+                OBJLoader.load('/threejs/obj/' + color + '.obj', function (obj) {
+                    scene.remove(tea);
+                    tea = obj;
+                    scene.add(tea);
+                });
+            });
+        }
+        var width, height, position, scene, camera, renderer, tea;
+        //尺寸
+        function commonSet() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+        }
+
+        //场景
+        function scene() {
+            scene = new THREE.Scene();
+        }
+
+        //摄像机
+        function camera() {
+            camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 10000);
+            camera.position.set(200, 200, 200);
+            camera.lookAt(scene.position);
+        }
+
+        //渲染器
+        function renderer() {
+            renderer = new THREE.WebGLRenderer({
+                antialias: true
+            });
+            renderer.setSize(width, height);
+            renderer.setClearColor(0xdddddd);
+            document.body.appendChild(renderer.domElement);
+        }
+
+        //辅助工具
+        function assist() {
+            var orbit = new THREE.OrbitControls(camera, renderer.domElement);
+        }
+
+        //光源
+        function light() {
+            var ambientLight = new THREE.AmbientLight(0x444444);
+            scene.add(ambientLight);
+            var light = new THREE.DirectionalLight(0xffffff);
+            light.position.set(100, 100, 100);
+            scene.add(light);
+        }
+
+        //绘制模型
+        function model() {
+            createTea('green');
+        }
+
+        //渲染
+        function render() {
+            renderer.render(scene, camera);
+            requestAnimationFrame(render);
+        }
+
+
+
+        //初始化
+        function init() {
+            commonSet();
+            scene();
+            camera();
+            renderer();
+            assist();
+            light();
+            model();
+            render();
+        }
+        init();
+    </script>
+</body>
+
+</html>
