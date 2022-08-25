@@ -74,7 +74,7 @@
             const material = new THREE.MeshBasicMaterial({
                 map: texture
             });
-            const cube = new THREE.Mesh( '',material);
+            const cube = new THREE.Mesh(geometry, material);
 
             scene.add(cube);
             // 当材质加载完成之后，我们创建一个新的mesh对象，为这个对象创建几何和材质，为材质附上一张贴图

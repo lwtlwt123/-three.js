@@ -9,12 +9,33 @@
             margin: 0;
         }
     </style>
+    <!-- <script type="importmap">
+        {
+            "imports": {
+                "three": " ../three.js/build/three.module.js",
+                "three/examples/jsm/controls/OrbitControls":"../three.js/examples/jsm/controls/OrbitControls.js",
+                "three/examples/jsm/libs/stats.module":"../three.js/examples/jsm/libs/stats.module.js",
+            }
+        }
+    </script> -->
 </head>
 
 <body>
     <!-- <script src="js/three.js"></script> -->
+
     <script src="http://www.yanhuangxueyuan.com/3D/example/three.js"></script>
-    <script>
+    <script src="http://www.yanhuangxueyuan.com/versions/threejsR92/build/three.js"></script>
+    <script src="http://www.yanhuangxueyuan.com/threejs/examples/js/loaders/OBJLoader.js"></script>
+    <script src="http://www.yanhuangxueyuan.com/threejs/examples/js/controls/OrbitControls.js"></script>
+    <!-- <script type="importmap">
+		{
+			"imports": {
+				"three": "../three.js/build/three.module.js"
+			}
+		}
+	</script> -->
+    <script type="module">
+        // import { OBJLoader } from '../three.js/examples/jsm/loaders/OBJLoader.js'
         // const scene = new THREE.Scene();
         // const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
@@ -63,34 +84,92 @@
         // animate();
 
         const scene = new THREE.Scene();
+        // scene.background = new THREE.Color('green')
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 150;
         const textureLoader = new THREE.TextureLoader()
         const renderer = new THREE.WebGLRenderer();
+        const loader = new THREE.OBJLoader();
+        let example = new THREE.Object3D();
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        textureLoader.load('./test.png', function (texture) {
-            const geometry = new THREE.SphereGeometry(2, 32, 16);
-            const material = new THREE.MeshBasicMaterial({
-                map: texture
-            });
-            const cube = new THREE.Mesh(geometry, material);
+        const spotLight = new THREE.SpotLight();
+        spotLight.position.set(100, 255, 255);
+        spotLight.intensity = 1.1;
+        scene.add(spotLight);
 
-            scene.add(cube);
-            // 当材质加载完成之后，我们创建一个新的mesh对象，为这个对象创建几何和材质，为材质附上一张贴图
-            camera.position.z = 5;
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.autoRotate = true;
 
-            function animate() {
-                requestAnimationFrame(animate);
 
-                cube.rotation.x += 0.01;
-                cube.rotation.y += 0.01;
 
-                renderer.render(scene, camera);
-            };
-            animate();
-        })
+
+        // textureLoader.load('./test.png', function (texture) {
+        //     const geometry = new THREE.SphereGeometry(2, 32, 16);
+        //     const material = new THREE.MeshBasicMaterial({
+        //         map: texture
+        //     });
+        //     const cube = new THREE.Mesh(geometry, material);
+
+        //     scene.add(cube);
+        //     // 当材质加载完成之后，我们创建一个新的mesh对象，为这个对象创建几何和材质，为材质附上一张贴图
+        //     camera.position.z = 5;
+
+        //     function animate() {
+        //         requestAnimationFrame(animate);
+
+        //         cube.rotation.x += 0.01;
+        //         cube.rotation.y += 0.01;
+
+        //         renderer.render(scene, camera);
+        //     };
+        //     animate();
+        // })
+        loader.load(
+            // resource URL
+            './1.obj',
+            // called when resource is loaded
+            function (object) {
+                // example = object.scene;
+                // const material = new THREE.MeshBasicMaterial({
+                //     map: object
+                // });
+                // const geometry = new THREE.SphereGeometry(2, 32, 16);
+                // const cube = new THREE.Mesh(geometry, material);
+                // console.log(object);
+                // console.log(typeof object);
+                // example = object.scene;
+                const s = 1;
+                object.scale.set(s, s, s);
+                scene.add(object);
+                // renderer.render(scene, camera);
+                function animate() {
+                    requestAnimationFrame(animate);
+                    renderer.render(scene, camera);
+
+                    // cube.rotation.x += 0.01;
+                    // cube.rotation.y += 0.01;
+
+                };
+                animate();
+
+            },
+            // called when loading is in progresses
+            function (xhr) {
+
+                console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+
+            },
+            // called when loading has errors
+            function (error) {
+                console.log(error);
+                console.log('An error happened');
+
+            }
+        );
     </script>
+
 </body>
 
 </html>
